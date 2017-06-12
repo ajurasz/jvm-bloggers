@@ -3,6 +3,7 @@ package com.jvm_bloggers;
 import com.giffing.wicket.spring.boot.starter.app.WicketBootSecuredWebApplication;
 import com.jvm_bloggers.frontend.admin_area.login.LoginPage;
 import com.jvm_bloggers.frontend.admin_area.session.UserSession;
+import com.jvm_bloggers.frontend.wicket.RenderJavaScriptToFooterHeaderResponseDecorator;
 import com.jvm_bloggers.frontend.public_area.HomePage;
 import com.ulisesbocchio.jasyptspringboot.annotation.EnableEncryptableProperties;
 import net.ftlines.wicketsource.WicketSource;
@@ -35,6 +36,8 @@ public class JvmBloggersApplication extends WicketBootSecuredWebApplication {
     @Override
     protected void init() {
         super.init();
+        setHeaderResponseDecorator(
+            new RenderJavaScriptToFooterHeaderResponseDecorator("footer-container"));
         getComponentPostOnBeforeRenderListeners().add(new StatelessChecker());
         new AnnotatedMountScanner().scanPackage("com.jvm_bloggers").mount(this);
         getMarkupSettings().setStripWicketTags(true);
