@@ -8,7 +8,12 @@ import com.jvm_bloggers.frontend.public_area.blogs.navigation.NavigationTabItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.repeater.Item;
 import org.apache.wicket.markup.repeater.data.DataView;
+import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.spring.injection.annot.SpringBean;
+
+import static com.jvm_bloggers.frontend.public_area.blogs.navigation.NavigationTabItem.ICON.MALE;
+import static com.jvm_bloggers.frontend.public_area.blogs.navigation.NavigationTabItem.ICON.TELEVISION;
+import static com.jvm_bloggers.frontend.public_area.blogs.navigation.NavigationTabItem.ICON.USERS;
 
 public abstract class AbstractBlogsPage extends AbstractFrontendPage {
 
@@ -37,9 +42,12 @@ public abstract class AbstractBlogsPage extends AbstractFrontendPage {
     }
 
     private void createNavigationItems() {
-        add(new NavigationTabItem(PERSONAL_TAB_ID, PersonalBlogsPage.class, this.getActiveClass()));
-        add(new NavigationTabItem(COMPANY_TAB_ID, CompanyBlogsPage.class, this.getActiveClass()));
-        add(new NavigationTabItem(VIDEO_TAB_ID, VideoBlogsPage.class, this.getActiveClass()));
+        add(new NavigationTabItem(PERSONAL_TAB_ID, "Personalne", MALE,
+            PersonalBlogsPage.class, this.getActiveClass()));
+        add(new NavigationTabItem(COMPANY_TAB_ID, "Firmowe", USERS,
+            CompanyBlogsPage.class, this.getActiveClass()));
+        add(new NavigationTabItem(VIDEO_TAB_ID, "Wideo", TELEVISION,
+            VideoBlogsPage.class, this.getActiveClass()));
     }
 
     private DataView<BlogStatisticsForListing> createBlogChannelList(String id) {

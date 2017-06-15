@@ -4,13 +4,13 @@
 
 <wicket:extend>
 
-    <h1>Monitorowane blogi</h1>
+    <h2>Monitorowane blogi</h2>
     <div>w nawiasach liczba postów w ostatnich 3 i 6 miesiącach</div>
 
-    <ul class="nav nav-tabs nav-justified blogs-nav">
-        <li role="presentation" wicket:id="personal">Personalne</li>
-        <li role="presentation" wicket:id="company">Firmowe</li>
-        <li role="presentation" wicket:id="video">Video</li>
+    <ul role="tablist" class="nav nav-tabs nav-justified text-center blogs-nav">
+        <li role="presentation" wicket:id="personal"></li>
+        <li role="presentation" wicket:id="company"></li>
+        <li role="presentation" wicket:id="video"></li>
     </ul>
 
     <span wicket:id="pageable-wrapper">
