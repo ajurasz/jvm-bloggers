@@ -37,7 +37,7 @@ public class InfinitePaginationPanel extends Panel {
         scrollingBehavior.setItemSelector(itemParent, ".item");
         scrollingBehavior.setNextSelector(nextLink);
         scrollingBehavior.bufferPx(20);
-//        scrollingBehavior.extraScrollPx(20);
+        scrollingBehavior.extraScrollPx(20);
         scrollingBehavior.loadingMsgText("loading...");
         scrollingBehavior.loadingFinishedMsg("completed!");
 

@@ -9,14 +9,12 @@ import com.jvm_bloggers.frontend.admin_area.blogs.BlogPostsPageRequestHandler;
 
 import lombok.AllArgsConstructor;
 
-import org.jvnet.hk2.annotations.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 @Service
 @AllArgsConstructor(onConstructor = @__(@Autowired))
 public class BlogsPageBackingBean {
-
-    private final BlogsRequestHandler requestHandler;
 
     private final BlogRepository blogRepository;
 
