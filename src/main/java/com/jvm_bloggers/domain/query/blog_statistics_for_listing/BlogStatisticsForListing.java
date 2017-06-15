@@ -17,7 +17,7 @@ public class BlogStatisticsForListing implements Serializable {
     private Integer countFirstRange;
     private Integer countSecondRange;
 
-    static BlogStatisticsForListing fromBlogPostStatisticProjection(
+    public static BlogStatisticsForListing fromBlogPostStatisticProjection(
         BlogStatisticsProjection projection) {
         return new BlogStatisticsForListing(
             projection.getId(),
