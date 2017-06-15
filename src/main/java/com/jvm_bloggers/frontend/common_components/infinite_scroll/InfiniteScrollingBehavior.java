@@ -2,6 +2,7 @@ package com.jvm_bloggers.frontend.common_components.infinite_scroll;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import javaslang.control.Try;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.wicket.Component;
@@ -14,8 +15,6 @@ import org.apache.wicket.resource.JQueryPluginResourceReference;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import javaslang.control.Try;
 
 @Slf4j
 public class InfiniteScrollingBehavior extends Behavior {
@@ -45,9 +44,9 @@ public class InfiniteScrollingBehavior extends Behavior {
         String jsonConfig = Try.of(() -> objectMapper.writeValueAsString(jsonData))
             .onFailure(throwable -> log.error(throwable.getMessage()))
             .getOrElse("{}");
-        CharSequence script = "jQuery( document ).ready(function() { jQuery('#" +
-            component.getMarkupId() + "').infinitescroll(" +
-            jsonConfig + ",function(a){}); });";
+        CharSequence script = "jQuery( document ).ready(function() { jQuery('#"
+            + component.getMarkupId() + "').infinitescroll("
+            + jsonConfig + ",function(a){}); });";
         if (!autoScroll) {
             script = script + "jQuery(window).unbind('.infscr');";
             script = script + "jQuery('" + jsonData.get("nextSelector") + "').click(function() {"

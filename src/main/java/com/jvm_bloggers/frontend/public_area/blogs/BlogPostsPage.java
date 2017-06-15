@@ -48,7 +48,8 @@ public class BlogPostsPage extends AbstractFrontendPage {
                 protected void populateItem(Item<BlogPost> item) {
                     BlogPost post = item.getModelObject();
                     item.add(new ExternalLink("postLink", post.getUrl(), post.getTitle()));
-                    item.add(new Label("publishedDate", post.getPublishedDate().format(DATE_TIME_FORMATTER)));
+                    item.add(new Label("publishedDate", post.getPublishedDate()
+                        .format(DATE_TIME_FORMATTER)));
                 }
             };
 
