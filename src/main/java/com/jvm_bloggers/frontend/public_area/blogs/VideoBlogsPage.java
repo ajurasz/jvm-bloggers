@@ -1,5 +1,7 @@
 package com.jvm_bloggers.frontend.public_area.blogs;
 
+import com.jvm_bloggers.entities.blog.BlogType;
+
 import org.wicketstuff.annotation.mount.MountPath;
 
 @MountPath("blogs/video")
@@ -12,6 +14,7 @@ public class VideoBlogsPage extends AbstractBlogsPage {
 
     @Override
     protected BlogsRequestHandler getBlogsRequestHandler() {
-        return blogsPageBackingBean.videoRequestHandler();
+        return new BlogsRequestHandler(blogStatsForListingQuery, blogRepository,
+            paginationConfiguration, BlogType.VIDEOS);
     }
 }

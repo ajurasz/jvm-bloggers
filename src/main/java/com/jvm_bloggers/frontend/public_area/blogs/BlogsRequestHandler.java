@@ -7,6 +7,7 @@ import com.jvm_bloggers.entities.blog.BlogType;
 import com.jvm_bloggers.frontend.admin_area.PaginationConfiguration;
 
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import org.apache.wicket.markup.repeater.data.IDataProvider;
@@ -17,7 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import java.util.Iterator;
 
 @Slf4j
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class BlogsRequestHandler implements
     IDataProvider<BlogStatisticsForListing> {
 

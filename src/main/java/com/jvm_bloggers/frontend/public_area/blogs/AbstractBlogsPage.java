@@ -1,6 +1,10 @@
 package com.jvm_bloggers.frontend.public_area.blogs;
 
 import com.jvm_bloggers.domain.query.blog_statistics_for_listing.BlogStatisticsForListing;
+import com.jvm_bloggers.domain.query.blog_statistics_for_listing.BlogStatisticsForListingQuery;
+import com.jvm_bloggers.entities.blog.BlogRepository;
+import com.jvm_bloggers.entities.blog_post.BlogPostRepository;
+import com.jvm_bloggers.frontend.admin_area.PaginationConfiguration;
 import com.jvm_bloggers.frontend.common_components.infinite_scroll.InfinitePaginationPanel;
 import com.jvm_bloggers.frontend.public_area.AbstractFrontendPage;
 import com.jvm_bloggers.frontend.public_area.blogs.navigation.NavigationTabItem;
@@ -25,7 +29,19 @@ public abstract class AbstractBlogsPage extends AbstractFrontendPage {
     static final String VIDEO_TAB_ID = "video";
 
     @SpringBean
-    protected BlogsPageBackingBean blogsPageBackingBean;
+    protected BlogRepository blogRepository;
+
+    @SpringBean
+    protected BlogPostRepository blogPostRepository;
+
+    @SpringBean
+    protected BlogStatisticsForListingQuery blogStatsForListingQuery;
+
+    @SpringBean
+    protected BlogWithStatisticsItemPopulator blogWithStatisticsItemPopulator;
+
+    @SpringBean
+    protected PaginationConfiguration paginationConfiguration;
 
     protected abstract BlogsRequestHandler getBlogsRequestHandler();
 
@@ -55,11 +71,11 @@ public abstract class AbstractBlogsPage extends AbstractFrontendPage {
             new DataView<BlogStatisticsForListing>(id, getBlogsRequestHandler()) {
                 @Override
                 protected void populateItem(Item<BlogStatisticsForListing> item) {
-                    blogsPageBackingBean.blogWithStatisticsItemPopulator().populateItem(item);
+                    blogWithStatisticsItemPopulator.populateItem(item);
                 }
             };
 
-        dataView.setItemsPerPage(blogsPageBackingBean.getDefaultPageSize());
+        dataView.setItemsPerPage(paginationConfiguration.getDefaultPageSize());
         dataView.setOutputMarkupId(true);
         return dataView;
     }

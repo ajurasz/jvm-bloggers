@@ -1,6 +1,9 @@
 package com.jvm_bloggers.frontend.public_area.blogs;
 
+import com.jvm_bloggers.entities.blog.BlogRepository;
 import com.jvm_bloggers.entities.blog_post.BlogPost;
+import com.jvm_bloggers.entities.blog_post.BlogPostRepository;
+import com.jvm_bloggers.frontend.admin_area.PaginationConfiguration;
 import com.jvm_bloggers.frontend.admin_area.blogs.BlogPostsPageRequestHandler;
 import com.jvm_bloggers.frontend.common_components.infinite_scroll.InfinitePaginationPanel;
 import com.jvm_bloggers.frontend.public_area.AbstractFrontendPage;
@@ -26,12 +29,21 @@ public class BlogPostsPage extends AbstractFrontendPage {
     static final String INFINITE_SCROLL_ID = "infinite-pager";
 
     @SpringBean
-    private BlogsPageBackingBean blogsPageBackingBean;
+    PaginationConfiguration paginationConfiguration;
+
+    @SpringBean
+    BlogRepository blogRepository;
+
+    @SpringBean
+    BlogPostRepository blogPostRepository;
 
     private final BlogPostsPageRequestHandler requestHandler;
 
     public BlogPostsPage(PageParameters parameters) {
-        requestHandler = blogsPageBackingBean.blogPostsRequestHandler(
+        requestHandler = new BlogPostsPageRequestHandler(
+            paginationConfiguration,
+            blogPostRepository,
+            blogRepository,
             parameters.get(BLOG_ID_PARAM).toLong(-1));
         WebMarkupContainer pageableWrapper = new WebMarkupContainer(DATA_VIEW_WRAPPER_ID);
         add(pageableWrapper);
@@ -53,7 +65,7 @@ public class BlogPostsPage extends AbstractFrontendPage {
                 }
             };
 
-        dataView.setItemsPerPage(blogsPageBackingBean.getDefaultPageSize());
+        dataView.setItemsPerPage(paginationConfiguration.getDefaultPageSize());
         dataView.setOutputMarkupId(true);
         return dataView;
     }

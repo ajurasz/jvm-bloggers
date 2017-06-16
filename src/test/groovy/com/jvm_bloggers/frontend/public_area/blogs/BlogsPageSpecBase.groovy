@@ -14,14 +14,15 @@ class BlogsPageSpecBase extends MockSpringContextAwareSpecification {
     BlogStatisticsForListingQuery blogStatisticsForListingQuery = Mock()
     BlogWithStatisticsItemPopulator blogWithStatisticsItemPopulator = new BlogWithStatisticsItemPopulator()
     PaginationConfiguration paginationConfiguration = new PaginationConfiguration(2)
-    BlogsPageBackingBean blogsPageBackingBean = new BlogsPageBackingBean(
-            blogRepository, blogPostRepository, blogStatisticsForListingQuery,
-            blogWithStatisticsItemPopulator, paginationConfiguration)
     RightFrontendSidebarBackingBean sidebarBackingBean = Stub()
 
     @Override
     protected void setupContext() {
-        addBean(blogsPageBackingBean)
+        addBean(blogRepository)
+        addBean(blogPostRepository)
+        addBean(blogStatisticsForListingQuery)
+        addBean(blogWithStatisticsItemPopulator)
+        addBean(paginationConfiguration)
         addBean(sidebarBackingBean)
     }
 }
