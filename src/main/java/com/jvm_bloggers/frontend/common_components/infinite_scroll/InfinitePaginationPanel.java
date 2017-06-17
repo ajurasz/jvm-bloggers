@@ -36,7 +36,6 @@ public class InfinitePaginationPanel extends Panel {
         scrollingBehavior.setNavSelector(pager);
         scrollingBehavior.setItemSelector(itemParent, ".item");
         scrollingBehavior.setNextSelector(nextLink);
-        scrollingBehavior.bufferPx(20);
         scrollingBehavior.extraScrollPx(20);
         scrollingBehavior.loadingMsgText("loading...");
         scrollingBehavior.loadingFinishedMsg("completed!");
@@ -47,7 +46,7 @@ public class InfinitePaginationPanel extends Panel {
     @Override
     protected void onConfigure() {
         super.onConfigure();
-        pager.add(new AttributeModifier("style", "display:none;"));
+        pager.add(new AttributeModifier("style", "position:absolute;left:-9999px;"));
         for (Behavior behavior : pager.get("next").getBehaviors()) {
             if (behavior instanceof AjaxPagingNavigationBehavior) {
                 callbackUrl.setObject(((AjaxPagingNavigationBehavior) behavior)
