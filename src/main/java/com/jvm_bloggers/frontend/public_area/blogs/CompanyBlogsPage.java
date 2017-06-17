@@ -13,8 +13,7 @@ public class CompanyBlogsPage extends AbstractBlogsPage {
     }
 
     @Override
-    protected BlogsRequestHandler getBlogsRequestHandler() {
-        return new BlogsRequestHandler(blogStatsForListingQuery, blogRepository,
-            paginationConfiguration, BlogType.COMPANY);
+    protected BlogType getBlogType() {
+        return BlogType.COMPANY;
     }
 }

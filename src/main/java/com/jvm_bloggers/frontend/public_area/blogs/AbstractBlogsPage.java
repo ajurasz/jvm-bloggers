@@ -3,6 +3,7 @@ package com.jvm_bloggers.frontend.public_area.blogs;
 import com.jvm_bloggers.domain.query.blog_statistics_for_listing.BlogStatisticsForListing;
 import com.jvm_bloggers.domain.query.blog_statistics_for_listing.BlogStatisticsForListingQuery;
 import com.jvm_bloggers.entities.blog.BlogRepository;
+import com.jvm_bloggers.entities.blog.BlogType;
 import com.jvm_bloggers.entities.blog_post.BlogPostRepository;
 import com.jvm_bloggers.frontend.admin_area.PaginationConfiguration;
 import com.jvm_bloggers.frontend.common_components.infinite_scroll.InfinitePaginationPanel;
@@ -43,7 +44,7 @@ public abstract class AbstractBlogsPage extends AbstractFrontendPage {
     @SpringBean
     protected PaginationConfiguration paginationConfiguration;
 
-    protected abstract BlogsRequestHandler getBlogsRequestHandler();
+    protected abstract BlogType getBlogType();
 
     protected abstract Class<? extends AbstractBlogsPage> getActiveClass();
 
@@ -68,7 +69,9 @@ public abstract class AbstractBlogsPage extends AbstractFrontendPage {
 
     private DataView<BlogStatisticsForListing> createBlogChannelList(String id) {
         final DataView<BlogStatisticsForListing> dataView =
-            new DataView<BlogStatisticsForListing>(id, getBlogsRequestHandler()) {
+            new DataView<BlogStatisticsForListing>(id,
+                new BlogsRequestHandler(blogStatsForListingQuery, blogRepository,
+                    paginationConfiguration, getBlogType())) {
                 @Override
                 protected void populateItem(Item<BlogStatisticsForListing> item) {
                     blogWithStatisticsItemPopulator.populateItem(item);

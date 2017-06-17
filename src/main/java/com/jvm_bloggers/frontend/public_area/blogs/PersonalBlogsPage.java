@@ -13,8 +13,7 @@ public class PersonalBlogsPage extends AbstractBlogsPage {
     }
 
     @Override
-    protected BlogsRequestHandler getBlogsRequestHandler() {
-        return new BlogsRequestHandler(blogStatsForListingQuery, blogRepository,
-            paginationConfiguration, BlogType.PERSONAL);
+    protected BlogType getBlogType() {
+        return BlogType.PERSONAL;
     }
 }

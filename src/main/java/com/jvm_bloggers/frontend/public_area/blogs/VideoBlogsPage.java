@@ -13,8 +13,7 @@ public class VideoBlogsPage extends AbstractBlogsPage {
     }
 
     @Override
-    protected BlogsRequestHandler getBlogsRequestHandler() {
-        return new BlogsRequestHandler(blogStatsForListingQuery, blogRepository,
-            paginationConfiguration, BlogType.VIDEOS);
+    protected BlogType getBlogType() {
+        return BlogType.VIDEOS;
     }
 }
