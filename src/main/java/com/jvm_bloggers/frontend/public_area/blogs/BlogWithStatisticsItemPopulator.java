@@ -10,6 +10,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.stereotype.Component;
 
+import static com.jvm_bloggers.frontend.public_area.blogs.BlogPostsPage.AUTHOR_NAME_PARAM;
+import static com.jvm_bloggers.frontend.public_area.blogs.BlogPostsPage.BLOG_ID_PARAM;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 
 @Component
@@ -25,13 +27,14 @@ public class BlogWithStatisticsItemPopulator {
 
     public void populateItem(final Item<BlogStatisticsForListing> item) {
         BlogStatisticsForListing blogStatisticsForListing = item.getModelObject();
-        item.add(new ExternalLink(URL_ID, blogStatisticsForListing.getUrl()));
-        BookmarkablePageLink blogPostsLink = new BookmarkablePageLink<>(
+        item.add(new BookmarkablePageLink<>(
             BLOG_POSTS_LINK_ID,
             BlogPostsPage.class,
-            new PageParameters().add("blogId", blogStatisticsForListing.getId()));
-        blogPostsLink.setBody(Model.of(abbreviate(blogStatisticsForListing.getUrl(), 40)));
-        item.add(blogPostsLink);
+            new PageParameters()
+                .add(BLOG_ID_PARAM, blogStatisticsForListing.getId())
+                .add(AUTHOR_NAME_PARAM, blogStatisticsForListing.getAuthor())));
+        item.add(new ExternalLink(URL_ID, blogStatisticsForListing.getUrl(),
+            abbreviate(blogStatisticsForListing.getUrl(), 40)));
         item.add(new ExternalLink(AUTHOR_BLOG_LINK_ID,
             TWITTER_HOME_URL + blogStatisticsForListing.getTwitter().getOrElse(""),
             blogStatisticsForListing.getAuthor())

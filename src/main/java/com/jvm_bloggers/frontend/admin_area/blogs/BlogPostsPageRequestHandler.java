@@ -6,12 +6,15 @@ import com.jvm_bloggers.entities.blog_post.BlogPostRepository;
 import com.jvm_bloggers.frontend.admin_area.PaginationConfiguration;
 import javaslang.control.Option;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 import org.apache.wicket.markup.repeater.data.IDataProvider;
 import org.apache.wicket.model.IModel;
 import org.springframework.data.domain.PageRequest;
 
 import java.util.Iterator;
 
+@Slf4j
 @RequiredArgsConstructor
 public class BlogPostsPageRequestHandler implements IDataProvider<BlogPost> {
 
@@ -22,16 +25,25 @@ public class BlogPostsPageRequestHandler implements IDataProvider<BlogPost> {
 
     @Override
     public Iterator<? extends BlogPost> iterator(long first, long count) {
+        log.debug("Refreshing data, first {}, count {}", first, count);
         int page = Long.valueOf(first / paginationConfiguration.getDefaultPageSize()).intValue();
-        return blogPostRepository
+        long start = System.currentTimeMillis();
+        Iterator<BlogPost> iterator = blogPostRepository
             .findByBlogIdOrderByPublishedDateDesc(blogId, new PageRequest(page,
                 paginationConfiguration.getDefaultPageSize())
             ).iterator();
+        long stop = System.currentTimeMillis();
+        log.debug("Iterator() execution time = " + (stop - start) + " ms");
+        return iterator;
     }
 
     @Override
     public long size() {
-        return blogPostRepository.countByBlogId(blogId);
+        long start = System.currentTimeMillis();
+        long count = blogPostRepository.countByBlogId(blogId);
+        long stop = System.currentTimeMillis();
+        log.debug("Size() execution time = " + (stop - start) + " ms");
+        return count;
     }
 
     @Override
