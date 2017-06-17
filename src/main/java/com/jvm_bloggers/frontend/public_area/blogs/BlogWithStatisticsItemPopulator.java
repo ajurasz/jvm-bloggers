@@ -6,11 +6,9 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.BookmarkablePageLink;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.repeater.Item;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.springframework.stereotype.Component;
 
-import static com.jvm_bloggers.frontend.public_area.blogs.BlogPostsPage.AUTHOR_NAME_PARAM;
 import static com.jvm_bloggers.frontend.public_area.blogs.BlogPostsPage.BLOG_ID_PARAM;
 import static org.apache.commons.lang3.StringUtils.abbreviate;
 
@@ -31,8 +29,7 @@ public class BlogWithStatisticsItemPopulator {
             BLOG_POSTS_LINK_ID,
             BlogPostsPage.class,
             new PageParameters()
-                .add(BLOG_ID_PARAM, blogStatisticsForListing.getId())
-                .add(AUTHOR_NAME_PARAM, blogStatisticsForListing.getAuthor())));
+                .add(BLOG_ID_PARAM, blogStatisticsForListing.getId())));
         item.add(new ExternalLink(URL_ID, blogStatisticsForListing.getUrl(),
             abbreviate(blogStatisticsForListing.getUrl(), 40)));
         item.add(new ExternalLink(AUTHOR_BLOG_LINK_ID,
