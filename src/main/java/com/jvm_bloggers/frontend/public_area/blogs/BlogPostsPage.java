@@ -17,6 +17,7 @@ import static com.jvm_bloggers.frontend.public_area.blogs.BlogPostsPage.BLOG_ID_
 public class BlogPostsPage extends AbstractFrontendPage {
 
     static final String BLOG_ID_PARAM = "blogId";
+    static final String TIMELINE_ID = "timeline";
 
     @SpringBean
     PaginationConfiguration paginationConfiguration;
@@ -33,6 +34,6 @@ public class BlogPostsPage extends AbstractFrontendPage {
             blogPostRepository,
             blogRepository,
             parameters.get(BLOG_ID_PARAM).toLong(-1));
-        add(new BlogPostsTimelinePanel("timeline", requestHandler));
+        add(new BlogPostsTimelinePanel(TIMELINE_ID, requestHandler));
     }
 }

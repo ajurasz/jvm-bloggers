@@ -1,7 +1,5 @@
 package com.jvm_bloggers.frontend.public_area.blogs
 
-import com.jvm_bloggers.domain.query.blog_statistics_for_listing.BlogStatisticsForListing
-import com.jvm_bloggers.entities.blog.projections.BlogStatisticsProjection
 import com.jvm_bloggers.frontend.common_components.infinite_scroll.InfinitePaginationPanel
 import com.jvm_bloggers.frontend.public_area.blogs.navigation.NavigationTabItem
 import javaslang.collection.List
@@ -14,12 +12,28 @@ import org.apache.wicket.request.mapper.parameter.PageParameters
 import org.apache.wicket.util.tester.TagTester
 
 import static com.jvm_bloggers.frontend.public_area.blogs.AbstractBlogsPage.*
-import static com.jvm_bloggers.frontend.public_area.blogs.BlogWithStatisticsItemPopulator.*
+import static com.jvm_bloggers.frontend.public_area.blogs.BlogWithStatisticsItemPopulator.AUTHOR_BLOG_LINK_ID
+import static com.jvm_bloggers.frontend.public_area.blogs.BlogWithStatisticsItemPopulator.AUTHOR_ID
+import static com.jvm_bloggers.frontend.public_area.blogs.BlogWithStatisticsItemPopulator.BLOG_POSTS_LINK_ID
+import static com.jvm_bloggers.frontend.public_area.blogs.BlogWithStatisticsItemPopulator.FIRST_COUNTER_ID
+import static com.jvm_bloggers.frontend.public_area.blogs.BlogWithStatisticsItemPopulator.SECOND_COUNTER_ID
+import static com.jvm_bloggers.frontend.public_area.blogs.BlogWithStatisticsItemPopulator.URL_ID
 import static com.jvm_bloggers.frontend.public_area.blogs.navigation.NavigationTabItem.ACTIVE_CSS_CLASS
 
-class PersonalBlogsPageSpec extends BlogsPageSpecBase {
+class BlogsPageSpec extends BlogsPageSpecBase {
 
-    def "Should render page with all it's components"() {
+    def "Should render page with company blogs"() {
+        when:
+        tester.startPage(CompanyBlogsPage)
+
+        then:
+        tester.assertComponent(COMPANY_TAB_ID, NavigationTabItem)
+        tester.assertBookmarkablePageLink("$COMPANY_TAB_ID:link", CompanyBlogsPage, new PageParameters())
+        tester.assertComponent("$DATA_VIEW_WRAPPER_ID:$DATA_VIEW_ID", DataView)
+        tester.assertComponent("$DATA_VIEW_WRAPPER_ID:$INFINITE_SCROLL_ID", InfinitePaginationPanel)
+    }
+
+    def "Should render page with personal blogs"() {
         when:
         tester.startPage(PersonalBlogsPage)
 
@@ -30,7 +44,27 @@ class PersonalBlogsPageSpec extends BlogsPageSpecBase {
         tester.assertComponent("$DATA_VIEW_WRAPPER_ID:$INFINITE_SCROLL_ID", InfinitePaginationPanel)
     }
 
-    def "Should set page tab as active"() {
+    def "Should render page with video blogs"() {
+        when:
+        tester.startPage(VideoBlogsPage)
+
+        then:
+        tester.assertComponent(VIDEO_TAB_ID, NavigationTabItem)
+        tester.assertBookmarkablePageLink("$VIDEO_TAB_ID:link", VideoBlogsPage, new PageParameters())
+        tester.assertComponent("$DATA_VIEW_WRAPPER_ID:$DATA_VIEW_ID", DataView)
+        tester.assertComponent("$DATA_VIEW_WRAPPER_ID:$INFINITE_SCROLL_ID", InfinitePaginationPanel)
+    }
+
+    def "Should set company tab as active"() {
+        when:
+        tester.startPage(CompanyBlogsPage)
+
+        then:
+        TagTester tagTester = tester.getTagByWicketId(COMPANY_TAB_ID)
+        tagTester.getAttribute("class").contains(ACTIVE_CSS_CLASS)
+    }
+
+    def "Should set personal tab as active"() {
         when:
         tester.startPage(PersonalBlogsPage)
 
@@ -39,7 +73,16 @@ class PersonalBlogsPageSpec extends BlogsPageSpecBase {
         tagTester.getAttribute("class").contains(ACTIVE_CSS_CLASS)
     }
 
-    def "Should display list of blogs"() {
+    def "Should set video tab as active"() {
+        when:
+        tester.startPage(VideoBlogsPage)
+
+        then:
+        TagTester tagTester = tester.getTagByWicketId(VIDEO_TAB_ID)
+        tagTester.getAttribute("class").contains(ACTIVE_CSS_CLASS)
+    }
+
+    def "Should render grouped list of blogs"() {
         given:
         List blogStatistics = List.of(
                 createBlogStatisticsForListing(1, 10, 20),
@@ -64,8 +107,7 @@ class PersonalBlogsPageSpec extends BlogsPageSpecBase {
 
     def "Should navigate to BlogPostsPage"() {
         given:
-        List blogStatistics = List.of(
-                createBlogStatisticsForListing(1, 10, 20))
+        List blogStatistics = List.of(createBlogStatisticsForListing(1, 10, 20))
         blogRepository.countByBlogType(_) >> blogStatistics.length()
         blogStatisticsForListingQuery.findBlogPostStatistics(_, _) >> blogStatistics
 
@@ -74,15 +116,22 @@ class PersonalBlogsPageSpec extends BlogsPageSpecBase {
         tester.clickLink("$DATA_VIEW_WRAPPER_ID:$DATA_VIEW_ID:1:$BLOG_POSTS_LINK_ID")
 
         then:
-        tester.assertRenderedPage(BlogPostsPage.class)
+        tester.assertRenderedPage(BlogPostsPage)
     }
 
-    private BlogStatisticsForListing createBlogStatisticsForListing(long id, int firstCount, int secondCount) {
-        BlogStatisticsForListing.fromBlogPostStatisticProjection([getId         : { id }, getUrl: { "url" + id },
-                                                                  getAuthor     : { "author" + id },
-                                                                  getTwitter    : { "twitter" + id },
-                                                                  getFirstCount : { firstCount },
-                                                                  getSecondCount: { secondCount }
-                                                                 ] as BlogStatisticsProjection)
+    def "Should generate next-link for infinity scroll"() {
+        given:
+        List blogStatistics = List.of(
+                createBlogStatisticsForListing(1, 10, 20),
+                createBlogStatisticsForListing(2, 10, 20),
+                createBlogStatisticsForListing(3, 10, 20))
+        blogRepository.countByBlogType(_) >> blogStatistics.length()
+        blogStatisticsForListingQuery.findBlogPostStatistics(_, _) >> blogStatistics
+
+        when:
+        tester.startPage(PersonalBlogsPage)
+
+        then:
+        tester.getTagByWicketId("next-page").getAttributeContains("href", "PersonalBlogsPage?0-1")
     }
 }

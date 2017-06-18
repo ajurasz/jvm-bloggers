@@ -81,22 +81,6 @@ public class InfiniteScrollingBehavior extends Behavior {
         return this;
     }
 
-    public InfiniteScrollingBehavior setContentSelector(Component component) {
-        component.setOutputMarkupId(true);
-        jsonData.put("contentSelector", "#" + component.getMarkupId(true));
-        return this;
-    }
-
-    public InfiniteScrollingBehavior useAutoScroll(boolean autoScroll) {
-        this.autoScroll = autoScroll;
-        return this;
-    }
-
-    public InfiniteScrollingBehavior animate(boolean animate) {
-        jsonData.put("animate", animate);
-        return this;
-    }
-
     public InfiniteScrollingBehavior debug(boolean debug) {
         jsonData.put("debug", debug);
         return this;
